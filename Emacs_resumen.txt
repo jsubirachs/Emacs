@@ -1,0 +1,1024 @@
+* MOVIMIENTOS
+	C-v 	Avanzar una pantalla completa
+	M-v 	Retroceder una pantalla completa
+	M-r	Re-positions the point to the top left, middle left,
+		or bottom left
+	C-l 	Re-centers the point to the middle, top or bottom in the buffer
+	C-M-l	Re-positions the comment or definition so it is in view in
+		the buffer
+	C-x C-n	Sets the goal column, the horizontal position for the point
+	C-u C-x C-n Resets the goal column, the horizontal position for
+	    	    the point
+	M-g M-g	Go to line
+	M-g TAB	Go to column
+	M-g c	Go to character position
+	C-f 	Avanzar un carácter
+	C-b 	Retroceder un carácter
+	M-f 	Avanzar una palabra
+	M-b 	Retroceder una palabra
+	C-n 	Avanzar a la línea siguiente
+	C-p 	Retroceder a la línea anterior
+	C-a 	Retroceder al comienzo de la línea
+	C-e 	Avanzar al final de la línea
+	M-m	Pone el cursor al comienzo de una línea identada
+	M-a 	Retroceder al comienzo de la oración
+	M-e 	Avanzar al final de la oración
+	M-}	Move forward to end of paragraph
+	M-{	Move backward to start of paragraph
+	M-<	Se mueve al comienzo del buffer.
+	M->	Se mueve al final del buffer.
+	S-Expressions:
+		Strings ("or')
+		Brackets ([and], (and), {and}, <and>)
+		C-M-f	Move forward by s-expression (Strings & Brackets)
+		C-M-b	Move backward by s-expression (Strings & Brackets)
+		C-M-d	Move down into a list (Brackets)
+		C-M-u	Move up out of a list (Brackets)
+		C-M-n	Move forward to the next list (Brackets)
+		C-M-p	Move backward to the previous list (Brackets)
+	C-M-a	Move to beginning of defun
+	C-M-e	Move to end of defun
+
+* FACTOR REPETICION
+  	C-u 	Factor de repeticion. C-u 8 C-f (8 veces C-f). Con
+		Meta-numero seguido de combinación se obtiene el mismo
+		resultado.
+
+* COMANDO DE ESCAPE
+  	C-g	Si Emacs dejara de responder a sus comandos, puede
+		detenerlo con seguridad al teclear C-g. Puede usar C-g
+		para detener un comando que esté tomando mucho tiempo
+		para ejecutarse. También puede usar C-g para descartar
+		un argumento numérico o el comienzo de un comando que
+		no quiere finalizar.
+
+
+* OPERACIONES DE BORRADO
+Deleted text is not retained in your kill ring whereas killed text is.
+	C-d		Delete character
+	<backspace>	Delete previous character
+	M-d,C-<backspace> Kill word
+	C-k  		kill rest of line
+	M-k  		kill sentence
+	C-M-K		kill s-expression
+	C-S-<backspace> kill current line
+
+
+* INSERTAR Y BORRAR
+	C-w		Kill active region. Cortas el texto.
+	M-w		Copy to kill ring. Copias el texto.
+	C-M-w		Append kill
+	C-y		Yank last kill. Pegas el último texto eliminado.
+	M-y		Cycle through kill ring, replacing yanked text.
+	M-z		The zap command. When you invoke it, you are asked
+			for a single character, ahead of the point. Zap then
+			kills up to (and including) the character you typed.
+
+
+* DELETING DUPLICATES
+  	M-x delete-duplicate-lines	Deletes first duplicate line
+	C-u M-x delete-duplicate-lines	Deletes last duplicate line
+	C-u C-u M-x delete-....		Deletes only adjacent duplicates
+	C-u C-u C-u M-x delete-...	Does not delete adjacent blank lines
+	
+
+* FLUSH AND KEEPING LINES
+  	Both commands act on the active region and accept a regexp pattern
+	M-x flush-lines	    Flushes (deletes) all lines in a region that match
+	    		    a pattern
+	M-x keep-lines	    Keeps all lines in a region that match a pattern
+	    		    and removes all non-matches
+	
+
+* JOINING AND SPLITTING LINES
+  	C-o   		Inserts a blank line after point
+	C-x C-o		Deletes all blank lines after point
+	C-M-o		Splits a line after point, keeping the indentation
+	M-^		Joins the line the point is on with the one above
+
+
+* WHITESPACE COMMANDS
+  	M-SPC		Deletes all but 1 space or tab to the left and right
+			of the point
+	M-x cycle-spacing  As above but cycles through all but one, all,
+	    		   and undo
+	M-\\		Deletes all spaces and tabs around the point
+	Whitespace Minor Mode:
+		M-x whitespace-mode		Minor mode that highlights all
+		       				whitespace characters
+		M-x whitespace-newline-mode	Minor mode that displays newline
+		       				characters with a $
+		M-x whitespace-toggle-options	Displays a toggle menu of all
+		    				whitespace-mode options
+	Whitespace Reporting and Cleanup:
+		M-x whitespace-report		Shows whitespace issues
+		M-x whitespace-report-region	As above but for the region
+		M-x whitespace-clean-up		Attempts automatic cleanup
+		M-x whitespace-clean-up-region	As above but for the region
+
+
+* TRANSPOSING TEXT
+  	C-t		Transpose characters
+	M-t		Transpose words
+	C-M-t		Transpose s-expressions
+	C-x C-t		Transpose lines
+	M-x transpose-paragraphs  Transpose paragraphs
+	M-x transpose-sentences	  Transpose sentences
+
+* FILLING
+	M-q		Refills the paragraph point is in
+	C-u M-q		Refills the paragraph point is in justify the text
+	C-x f		Sets the fill column width
+	C-x .		Sets the fill prefix
+	M-x auto-fill-mode   Toggles auto-filling
+
+
+* COMMENTING
+	M-;		Comment or uncomment
+	C-x C-;		Comment or uncomment line
+	M-x comment-box	Comments the region but as a box
+	M-j,C-M-j	Inserts new line and continues with comment on a
+			new line
+
+* SEARCH AND REPLACE
+  	C-M-%		Query regexp search and replace
+	M-%		Query search and replace
+	The query commands are interactive:
+	    SPC,y 	   Replaces one match, then continues
+	    .		   Replaces one match, then exits
+	    RET,q	   Exits without replacing match
+	    !		   Replaces all matches in buffer
+	    ^		   Moves point back to previous match
+	M-x replace-string    Search and replace
+	M-x replace-regexp    Regexp search and replace
+
+
+* EMACS REGEXPS (REGULAR EXPRESSIONS)
+  	\|		Alternative
+	\(,\)		Capturing group
+	\{,\}		Repetition
+	\<,\>		Matches beginning and end of word
+	\_<,\_>		Matches beginning and end of symbol
+	\1 to \9	Inserts text from group \N
+	\#1 to \#9	Inserts text from group \N but cast as an integer
+	       		(This is only useful in lisp forms)
+	\?		Prompts for text input from user
+	\#		Inserts a number incremented from 0
+	\&		Inserts whole match string
+	\,(form ...)	You can call out to elisp functions from within
+			the replace portion of the search and replace interface
+		\,(upcase \N)	    Uppercases capturing group \N
+		\,(format "%.2f" \#N)  Casts \#N to a number and formats it as
+			  	       a decimal with two decimal points
+	\scode		Matches any character whose syntax table code is "code"
+	\Scode		Matches any character whose syntax table code is not
+			"code"
+	Syntax Table codes (major mode-dependant):
+	       Whitespace characters ( - )
+	       		  For example to match all whitespace characters
+			  you should search for \s-
+	       Word constituents ( w )
+	       Symbol constituents ( _ )
+	       Punctuation characters ( . )
+	       Open/close parenthesis ( (and) )
+	       String characters ( " )
+	       Open/close comment characters ( < and > )
+	 Para saber la syntax class de un character, ponemos el cursor encima
+	 y presionamos:
+	       C-u M-x what-cursor-position
+	       o
+	       C-u C-x =
+
+* CHANGING CASE
+  	C-x C-u		Uppercases the region
+	C-x C-l		Lowercases the region
+	M-x upcase-initials-region     Capitalizes the region
+	M-c 		Capitalizes the next word
+	M-u		Uppercases the next word
+	M-l		Lowercases the next word
+	
+* COUNTING THINGS
+  	M-x count-lines-region		Counts number of lines in the region
+	M-x count-matches		Counts number of patterns that match
+	    				in a region
+	M-x count-words			Counts words, lines and chars in the
+	    				buffer
+	M-x count-words-region,M-=	Counts words, lines and chars in the
+	    				region
+
+
+* MARCAR REGIONES
+  Generales:
+  	C-<SPC>		Activas selección de texto. Sets the mark, and toggles
+			the region
+	C-u C-<SPC>  	Vuelves al último lugar (marca) donde estabas en el
+	    		texto. Jumps to the mark, and repeated calls go further
+			back the mark ring.
+	S+<arrow key>	Shift selection similar to other editors
+	C-x C-x		Exchanges the point and mark, and reactivates your last
+	    		region
+  Especificos:
+	M-h		Marks the next paragraph
+	C-x h		Marks the whole buffer
+	C-M-h		Marks the next defun
+	C-x C-p		Marks the next page
+	M-@		Marks the next word
+	C-M-<SPC>
+	  and		
+	C-M-@		Marks the next s-expression
+	C-<SPC> , C-g	Deactivates the region
+
+* DESHACER
+	C-/	Deshace los cambios hechos por un comando.
+	C-_	Es un comando alternativo para deshacer; funciona
+		igual que C-/.
+	C-x u	Funciona exactamente igual que C-/, pero es menos
+	    	cómodo de teclear.
+
+* DESHACER CAMBIOS EN VENTANAS
+  	M-x winner-mode Remembers your window settings.
+	C-c <left>	Undo windows settings.
+	C-c <right>	Redo windows settings.
+
+* ARCHIVOS
+	C-x C-f   Encontrar un archivo. Abrir uno existente o crearlo.
+	C-x C-r	  Finds a file in read only mode
+	C-x C-q	  Toggles read only mode
+	C-x C-s   Guardar el archivo.
+	C-x s	  Le pregunta, por cada buffer que tenga cambios,
+	    	  si quiere guardarlo o no.
+	C-x C-w	  If you want to save a buffer to a different file –
+	    	  like to Save As... to write to a new file.
+
+* BUFFERS
+	C-x C-b   Lista de buffers.
+	C-x b	  Tecleas el nombre del buffer al que quieres ir.
+
+* SALIR
+	C-z	 "suspende" Emacs (ejecutado en terminal); esto es, se
+		 regresa al intérprete de comandos pero no se destruye
+		 Emacs.  En los intérpretes de comandos más comunes,
+		 puede reanudar Emacs con el comando "fg" o con "%emacs".
+	C-x C-c	 Salir de Emacs. Ofrece guardar cada archivo alterado
+	    	 antes de finalizar Emacs.
+	
+
+* BOOKMARKS
+	C-x r m		Set a bookmark
+	C-x r l		List bookmarks
+	C-x r b		Jump to bookmark
+
+
+* REGISTERS
+	C-x r n		Store number in register
+	C-x r s		Store region in register
+	C-x r SPC	Store point in register
+	C-x r +		Increment number in register (prefix-numeric-value)
+	C-x r j 	Jump to register
+	C-x r i		Insert content of register
+	C-x r w		Store window configuration in register
+	C-x r f		Store frameset in register
+
+
+* EXTENDER EL CONJUNTO DE COMANDOS
+	C-x 	Carácter eXtendido.  Seguido por un carácter.
+        M-x 	Comando eXtendido por nombre.  Seguido por un nombre
+                largo.
+	M-x replace-string	Te pide dos argumentos. El primero es la
+	    			palabra a sustituir, el segundo es la
+				palabra sustituta. Cambiará cada ocurrencia
+				después de la posición inicial del cursor.
+	M-x recover-file	Recupera la edición previa al guardado.
+	    			Abres el fichero normal y ejecutas eso.
+				Te cargará el fichero auto guardado.
+	M-x fundamental-mode	Es un comando para cambiar al modo
+	    			fundamental.
+
+
+* MODO MAYOR/MENOR
+	M-x auto-fill-mode	Emacs rompe la línea entre palabras
+       	   			automáticamente siempre que inserte texto
+				y la línea sea demasiado ancha.
+	M-x text-mode		Entras en modo mayor (Text)
+	M-x auto-revert-mode	Reverts buffer when file changes. Useful if the
+	    			file content changes frequently. Emacs detects
+				changes and simply reloads the entire file.
+	M-x auto-revert-tail-mode  Appends changes when file changes. Works the
+	    			   same way as tail -f : when the file changes,
+				   the changes are appended to the end of the
+				   buffer and Emacs will scroll accordingly.
+
+	
+* BUSCAR
+	C-s	Para búsqueda hacia adelante, DESPUÉS de la posición
+		actual del cursor. Begins an incremental search
+	C-r	Para la búsqueda hacia atrás, ANTES de la posición
+		actual del cursor. Begins a backward incremental search
+	C-M-s	Begins a regexp incremental search
+	C-M-r	Begins a regexp backward incremental search
+	RET	Pick the selected match
+	C-g	Exit Isearch
+	Search ring (history):
+	       M-n	Move to next item in search history
+	       M-p	Move to previous item in search history
+	       C-M-i	"TAB"-complete search string against previous search
+	       		ring
+	       C-s C-s	Begins Iseach against last search string
+	       C-r C-r	Begins backward Isearch against last search string
+	Searching for strings at point:
+	       C-w    	Add word at point to search string
+	       C-M-y	Add character at point to search string
+	       M-s C-e	Add rest of line at point to search string
+	       C-y 	Yank ("paste") from clipboard to search string
+	Config Isearch behave (affects current Isearch):
+	       M-s c	Toggles case-sensitivity
+	       M-s r	Toggles regular-expression mode
+	       M-s w	Toggles word mode
+	       M-s _	Toggles symbol mode
+	       M-s <SPC> Toggles lax whitespace matching
+	       M-s o	Activate occur on current search string inside Isearch
+	M-s w  	Isearch forward for word
+	M-s _	Isearch forward for symbol
+	M-s .	Isearch forward for symbol at point
+	Occur (like grep):
+	      M-s o 	Occur mode. List lines matching a pattern.
+	Multi-Occur (occur mode on multiple buffers):
+	      M-x multi-occur-in-matching-buffers	      
+			Takes a regular expression of buffers to match
+			– for instance \.py$ to search all Python buffers
+	      M-x multi-occur
+			You explicitly select the buffers you want to search
+	Navegar el buffer sin cambiar de ventana:
+	      M-g M-n	Jump to next "error"
+	      M-g M-p	Jump to previous "error"
+	Occur buffer:
+	      M-n,M-p	Go to next and previous occurrence
+	      <,>	Go to beginning and end of buffer
+	      g		Revert the buffer, refreshing the search results
+	      q		Quits occur mode
+	      e		Switches to occur edit mode
+	      C-c C-c	Exits occur edit mode and applies changes
+	Imenu:
+	      M-x imenu		A generic indexing framework for jumping to
+	      	  		points of interest in a buffer.
+	      
+
+* MÚLTIPLES VENTANAS
+	C-x 0	Deletes the active window
+	C-x 1	Expande la ventana que contiene el cursor, para ocupar
+		toda la pantalla.  Esto oculta todas las demás ventanas.
+  	C-x 2	Divide la pantalla en dos ventanas. Split windows below.
+	C-x 3	Split window right.
+	C-x o 	("o" para "otro") para mover el cursor a otra ventana.
+	    	Switch active window.
+	M-x windmove-default-keybindings
+	It lets you move in cardinal directions instead of cycling through
+	all windows.You can switch windows with your shift key by pressing:
+	S-<left> , S-<right> , S-<up> , S-<down> .
+	
+	Working with Other Windows:	
+	The other window in this case is the one immediately after the
+	current one when you run "C-x o"
+
+	C-M-v		Desplazar la otra ventana (scroll hacia abajo)
+	C-M-S-v		Desplazar la otra ventana (scroll hacia arriba)
+	C-x 4 C-f	Seguido del nombre de uno de sus archivos.
+   	      		Vea que el archivo especificado aparece en
+			la ventana inferior.  El cursor va allá también.
+	C-x 4 d		Opens M-x dired in the other window
+	C-x 4 C-o	Displays a buffer in the other window
+	C-x 4 b		Switches the buffer in the other window and makes it
+	      		the active window
+	C-x 4 0		Kills the buffer and window
+	
+
+* MULTIPLES FRAMES
+  	C-x 5 2		Create a new frame
+	C-x 5 b		Switch buffer in other frame
+	C-x 5 0		Delete active frame
+	C-x 5 1		Delete other frames
+	C-x 5 C-f	Finds a file in the other window
+	C-x 5 d		Opens M-x dired in the other window
+	C-x 5 C-o	Displays a buffer in the other window
+
+
+* NIVELES RECURSIVOS DE EDICIÓN
+Un "nivel recursivo de edición" se indica en la línea de modo mediante
+corchetes en la línea de modo: [(Fundamental)] en vez de (Fundamental).
+
+One example is realizing during Isearch or macro playback that you
+need to edit text, send an e-mail or otherwise temporarily suspend
+what you are doing. C-r lets you do that. When you are finished, type
+C-M-c to resume where you left off before.
+
+Para salir de los niveles recursivos de edición, teclee ESC ESC ESC.
+Éste es un comando de "salida" para todo propósito.  También lo puede
+usar para eliminar ventanas extras, y salir del minibuffer.
+
+No se puede usar C-g para salir de los "niveles recursivos de
+edición".  Esto es porque C-g es usado para cancelar comandos y
+argumentos DENTRO del nivel recursivo de edición.
+
+
+* DOCUMENTACION/AYUDA
+Emacs provee comandos para leer documentación acerca de los comandos de
+Emacs.  Todos estos comandos de "ayuda" comienzan con el carácter
+Control-h, que es llamado "el carácter de Ayuda (Help)".
+Si está REALMENTE perdido teclee "C-h ?" y Emacs le dirá qué tipo de ayuda
+puede ofrecerle.
+
+"secuencia incompleta" C-h	 Emacs le mostrará todas las combinaciones
+	   	       		 existentes con esa secuencia y su definición.
+
+The Describe System:
+- "C-h m" o "M-x describe-mode"	 La documentación del modo mayor actual.
+
+Displays the documentation for the major mode (and any minor modes
+also enabled) along with any keybindings introduced by said modes. The
+describe command looks at your current buffer. This command should be
+your first port of call when you’re using a new major mode. You will
+discover a lot of Emacs’s functionality this way and it is absolutely
+imperative that you use this command. What it doesn’t do is list
+mode-specific commands that are not bound to any key: they are simply
+not shown.
+
+- "C-h f" o "M-x describe-function" Describe una función.  Usted teclea
+    				 el nombre de la función.
+
+Describes a function. Another command on the critical path to
+mastering Emacs. Knowing what something does in Emacs (and how to look
+it up) is useful but so is being able to jump to the part of the code
+where it’s declared.  Describing a function will give you the elisp
+function signature, the keys (if any) bound to it, a hyperlink to
+where it’s declared, and a doc string.  If the function is a command,
+it will say it is interactive.
+
+- "C-h v" o "M-x describe-variable" Muestra documentación de las variables,
+    				 incluyendo los valores que pueda poner
+				 para adaptar el comportamiento Emacs.
+				 Deberá teclear el nombre de la variable
+				 cuando Emacs pregunte por ella.
+
+Describes a variable. Like describe-function , this command is also
+important, but perhaps less so as changing variables is not always
+easy to do for a beginner. Nevertheless, being able to read up on what
+a variable does is.
+
+- C-h c "secuencia de comando"	 Emacs le mostrará una descripción muy
+      		    		 breve del comando.
+
+- "C-h k 'secuencia de comando'" o "M-x describe-key"	Muestra la documentación
+       		     	       	 de la función en una ventana de Emacs.
+
+Describes what a key binding does. Of all the commands, this is one of
+the most useful ones to memorize, and like M-x describe-function
+it’s a command you will use frequently. If you’re unsure what a key
+binding does, simply enter the describe-key interface and re-type the
+key — and Emacs will tell you what it does.
+
+Apropos:
+M-x apropos			 The thermonuclear option. This command
+    				 will display all symbols that match a given
+				 pattern. Useful if you’re trying to track down
+				 both variables, commands and functions relating
+				 to a pattern.
+"C-h a" o "M-x apropos-command"	 This command will list only the commands.
+"C-h d" o "M-x apropos-documentation" Searches just the documentation. In Emacs
+     	       			      parlance, that means the doc string
+				      (documentation string) with which you can
+				      supply symbols. Occasionally useful.
+M-x apropos-library		 Lists all variables and functions defined
+    				 in a library. This command can be useful if
+				 you’re investigating a new mode or package as
+				 it lists the all the functions and variables
+				 defined in it.
+M-x apropos-user-option		 Shows user options available through the
+    				 Customize interface. This is one way to get the
+				 symbol names of Customize options, but if
+				 you’re looking for ways to search the Customize
+				 interface, you are better off using the Search
+				 box in the Customize interface as it lets you
+				 customize the matches as well.
+M-x apropos-value		 Searches all symbols with a particular value.
+    				 If you’re looking for a variable that holds a
+				 particular value, this command may be of use
+				 to you. A potential use is if I know the value
+				 of a variable but not the name or where it’s
+				 defined.
+
+Info:				 				 
+"C-h i" o "M-x info"		 Leer los manuales incluidos (alias Info).
+    				 Este comando lo pone en un buffer especial
+				 llamado "*info*" donde puede leer manuales
+				 de los paquetes instalados en su sistema.
+	[ and ]			 Previous/next node
+	l and r			 Go back/forward in history
+	n and p			 Previous/next sibling node
+	u     			 Goes up one level to a parent node
+	SPC			 Scroll one screen at a time
+	Backspace		 Scroll back one screen at a time
+	b			 Goes to beginning of the page
+	TAB			 Cycles through cross-references and links
+	RET			 Opens the active link
+	m			 Prompts for a menu item name and opens it
+	q			 Closes the info browser
+	?			 Lists all info commands
+M-x info-apropos		 With a search pattern, Emacs will crawl all
+    				 known info manual pages looking for matching
+				 patterns.
+C-h r				 El manual de Emacs.
+C-h C <RET>			 To see the coding system in use for the
+      				 current buffer
+M-x man <RET> comando		 Puedes leer los man del sistema desde Emacs
+M-x proced    			 Abre buffer con lista de procesos (comando top)
+    				 y puedes cerrar procesos, etc usando teclas
+				 parecidas a DIRED
+M-x find-library		 Puedes leer el codigo fuente de la libreria
+
+
+* PYTHON
+If you are programming Python using Emacs, then you should
+probably be using python-mode. With python-mode, after marking the
+block of code,
+        C-c >		Shifts the region 4 spaces to the right
+        C-c < 		Shifts the region 4 spaces to the left
+If you need to shift code by two levels of indention, or some arbitary
+amount you can prefix the command with an argument:
+        C-u 8 C-c >     Shifts the region 8 spaces to the right
+       	C-u 8 C-c < 	Shifts the region 8 spaces to the left
+Another alternative is to use M-x indent-rigidly which is bound to C-x TAB:
+	C-u 8 C-x TAB  	Shifts the region 8 spaces to the right
+	C-u -8 C-x TAB 	Shifts the region 8 spaces to the left
+Also useful are the rectangle commands that operate on rectangles of
+text instead of lines of text.
+For example, after marking a rectangular region,
+    	C-x r o	   	Inserts blank space to fill the rectangular region
+	      		(effectively shifting code to the right)
+	C-x r k		kills the rectangular region (effectively shifting
+	      		code to the left)
+	C-x r t 	Prompts for a string to replace the rectangle with.
+	      		Entering
+	C-u 8 <space> 	Will then enter 8 spaces.
+
+
+* CONFIGURAR EMACS
+Emacs se puede configurar de dos maneras:
+1- Modificando código elisp de lo que quieres cambiar.
+2- Usando la interface de Customize:
+M-x customize	       Displays the Customize interface and all the groups.
+M-x customize-browse   Opens a tree group browser. Much like the regular
+		       Customize interface but without the group descriptions.
+M-x customize-customized Customizes options and faces that you have changed but
+    			 not saved. Useful if you want to tweak things.
+M-x customize-changed  Displays all options changed since a particular Emacs
+    		       version. Good way to discover new features and options.
+M-x customize-face     Prompts for the name of a face to Customize. I recommend
+    		       you put your point on the face you want to change. It’ll
+		       fill in the name automatically.
+M-x customize-group    Prompts for a group name (e.g., python ) to Customize.
+M-x customize-mode     Customizes the major mode of your current buffer. You
+    		       should do this for every major mode you use. It’s a quick
+		       way to change things and gain an overview of what your
+		       major mode can do.
+M-x customize-saved    Displays all your saved options and faces. Extremely
+    		       handy if you want to track down and disable errant
+		       changes.
+M-x customize-themes   Shows a list of installed themes you can switch to.
+
+
+* EVALUANDO CODIGO ELISP
+Si encuentras código interesante que puedas añadir en algun lugar de Emacs,
+antes de añadirlo puedes evaluarlo y comprobar que funciona:
+Restarting Emacs      Is the simplest way, which I recommend if you have broken
+	   	      something in Emacs or if you want to be sure things work
+		      in a fresh environment.
+M-x eval-buffer	      Will evaluate the entire buffer you’re in. This is what
+    		      I use to evaluate something.
+M-x eval-region	      Evaluates just the region that you have marked.
+C-M-x		      If you evaluate the buffer, change a defvar ’s default
+		      value, then re-evaluate it, it won’t apply the changes
+		      made to defvar. The only way to force the change is to
+		      press C-M-x with your point in each defvar or defcustom
+		      form.
+
+
+* PACKAGE MANAGER
+Emacs has shipped with a package manager that seamlessly displays and installs
+packages from centralized repositories.
+You can add this to your init file:
+
+(setq package-archives
+'(("gnu" . "http://elpa.gnu.org/packages/")
+("marmalade" . "http://marmalade-repo.org/packages/")
+("melpa" . "http://melpa.milkbox.net/packages/")))
+
+M-x package-list-packages	Emacs should retrieve the package listings from
+    				all three repositories above.
+M-x package-install		If you know the name of the package, enter the
+    				name in the minibuffer. And like most minibuffer
+				prompts, this one also has TAB completion.
+				
+* IDO MODE
+M-x ido-mode
+Es un modo que añade velocidad y mejora en autocompletado cuando usas
+la interfaz de ficheros (C-x C-f), directorios (C-x d) o buffers (C-x b).
+- Para customizarlo y activarlo siempre:
+M-x customize-option RET ido-mode RET y darle a Apply and Save
+- You can also improve IDO’s fuzzy matching by enabling flex matching:
+M-x customize-option RET ido-enable-flex-matching RET
+- And you can customize many more features by running:
+M-x customize-group RET ido
+Algunos atajos:
+	C-s and C-r	Move to the next and previous match
+	TAB 		Traditional non-IDO TAB-completion
+	RET		Open selected match
+	C-d		Open M-x dired buffer in current directory
+	//		Go to root directory /
+	~/		Go to home directory ~
+	Backspace	Delete a character or go up one directory
+
+
+* HELM
+Helm excels when you don’t know exactly what you’re looking for or if
+you require additional, contextual awareness of similar matches.
+	C-x c		 Prefix key for all Helm completion commands.
+	M-x helm-apropos Helm has its own apropos completion engine
+	C-x c b		 Resumes last Helm command
+	C-x c /		 Invokes the command line utility "find" on the active
+	      		 buffer's current directory
+	C-x c a		 Completes M-x apopos results
+	C-x c m		 Completion engine for the "man" page program
+	C-x c i		 Lists completions sourced from M-x imenu or Semantic
+	C-x c r		 Interactive regular expression builder
+	C-x c h r	 Search Emacs topics in M-x info
+	C-x c M-x	 List completions sourced from M-x
+	C-x c M-s o	 Use Helm to match M-x occur patterns
+	C-x c C-c g	 Show matches from Google Suggest
+	Helm Bindings (the most important):
+	     RET      Primary action
+	     C-e      Secondary action
+	     C-j      Tertiary action
+	     TAB      Switch to action selector
+	     C-n,C-p  Next and previous candidate
+	     M-<,M->  Beginning and end of completion list
+
+
+* GREP:
+Searching files already open in Emacs is useful but more often than
+not you want to search files that aren’t open in Emacs and the command
+line utility grep is a great way to do just that.
+     ack and ag:
+     	 If you prefer ack or ag to grep , then head to the Emacs package
+     	 manager where you will find Emacs-friendly packages for both.
+     M-x grep          Prompts for arguments to pass to grep
+     M-x grep-find     Prompts for arguments to pass to grep and find
+     M-x lgrep	       Prompts for query and glob pattern to search for
+     	 	       with grep
+     M-x rgrep	       Prompts for query and glob pattern then recursively
+     	 	       searches with grep and find
+     M-x rzgrep	       Like M-x rgrep but searches compressed gzip files
+     Grep buffer:
+     	  M-g M-n	Jump to next match
+	  M-g M-p	Jumpt to previous match
+
+
+* KEYBOARD MACROS
+
+Recorded macros have their own macro ring, much like the kill ring,
+undo ring, and history rings. They are never truly lost (unless you
+exit Emacs!) but you can explicitly save them to disk.
+
+     F3			Starts macro recording, or inserts counter value
+     F4			Stops macro recording or plays last macro
+     C-x ( and C-x )	Starts and stops macro recording
+     C-x e     	   	Plays last macro
+     C-u F3		Starts recording but appends to the last macro
+     C-u F4		Plays the second macro in the ring
+     numeric F3		Starts recording but sets counter to numeric
+     numeric F4		Plays last macro numeric times
+     Advanced Commands:
+     	      C-x C-k		Prefix key group
+	      Counter commands:	    
+	      	      C-x C-k C-a	Adds to counter
+	      	      C-x C-k TAB,F3	Inserts counter
+	      	      C-x C-k C-c	Sets counter
+		      C-x C-k C-f	Sets format counter
+		      C-x C-k q		Queries for user input while recording
+		      Query key binding:
+		      	    Y		Continues as normal
+			    N		Skips the rest of the macro
+			    RET		Stops the macro entirely
+			    C-l		Recenters the screen
+			    C-r		Enters recursive edit
+			    C-M-c	Exits recursive edit
+	      Save and Recall:
+	      	      C-x C-k C-n	Cycles macro ring to next
+		      C-x C-k C-p	Cycles macro ring to previous
+		      C-x C-k n		Names the last macro
+		      C-x C-k b		Binds the last macro to a key
+		      C-x C-k e		Edits last macro
+		      C-x C-k l		Edits the last 300 keystrokes
+		      M-x insert-kbd-macro Inserts macro as elisp
+		      
+* LOSSAGE
+Emacs remembers the last 300 characters and commands you typed. You can see
+this list of characters by typing:
+     	  C-h l
+You can even save every keystroke you make in Emacs – including
+sensitive things like passwords, so beware – by typing:
+	  M-x open-dribble-file
+
+
+* TEXT EXPANSION TOOLS
+Recomienda primero focalizarse en YASnippet para template y Hippie
+Expand por ser muy productivo. Mas adelante puedes integrar Abbrev y
+Autoinsert si lo crees necesario.
+       Abbrev:
+		C-x a l		Adds mode-specific abbrev
+		C-x a g		Adds global abbrev
+		C-x a i l	Adds mode-specific inverse abbrev
+		C-x a i g	Adds global inverse abbrev
+       DAbbrev:
+		M-/		Expands word at the point using
+				M-x dabbrev-expand
+		C-M-/		Expands as much as possible, and shows
+				a list of possible completions
+       Hippie Expand:
+		Replace DAbbrev with Hippie Expand in init file
+       	        (global-set-key [remap dabbrev-expand] 'hippie-expand)
+       Skeletons
+       Tempo
+       YASnippet
+       Autoinsert
+
+
+* INDENTING
+When you press TAB , Emacs usually calls indent-for-tab-command , a
+generic proxy command that either indents your code or attempts to
+TAB-complete the word at the point.
+  The current line:
+      TAB		Indents line using major mode's indentation command.
+      			Some major modes override the TAB key and instead call
+			their own specialized indent command.
+			If you dislike the use of tab characters and if
+			you prefer whitespace, customize the variable
+			indent-tabs-mode.
+			The variable tab-width controls how many characters
+			of spacing each tab uses. It also controls
+			the amount of whitespace to use if you disabled
+			indent-tabs-mode.
+      M-i		Inserts spaces or tabs to next tab stop
+      M-x edit-tab-stops	Edits tab stops
+  Indenting Regions:
+  There are two types of region indentation commands:
+  “intelligent” ones that ask your major mode’s indentation
+  engine for advice – something that works well with languages
+  like HTML or C – and plain, fixed-width indentation for the rest.
+      TAB      	        Indents a line or region as per the major mode
+      C-M-\		Indents using major mode's region indent command
+      C-x TAB		Rigidly indents
+      
+
+* SORTING
+All commands sort lines, except the lone paragraph command.
+M-x sort-lines sorts in ascending order, but if you call it with
+a universal argument it will reverse the sort order.
+    	     M-x sort-lines	    Sorts alphabetically
+	     M-x sort-fields	    Sorts field(s) lexicographically
+	     M-x sort-numeric-fields	  Sorts field(s) numerically
+	     M-x sort-columns	    Sorts column(s) alphabetically
+	     M-x sort-paragraphs    Sorts paragraphs alphabetically
+	     M-x sort-regexp-fields Sorts by regexp-defined fields
+	     	 		    lexicographically
+
+* ALIGNING
+Text alignment in Emacs encompasses both justification and
+columnated text. Each alignment rule in Emacs – stored in align-rules-list
+	     M-x align		Aligns region based on align rules
+	     M-x align-current	Aligns section based on align rules. A section
+	     	 		is a group of consecutive lines for which the
+				first matching alignment rule applies.
+	     M-x align-regexp	Aligns region based on regexp. There are two
+	     	 		modes of operation, novice mode, which is what
+				you see when you run the command; and complex
+				mode, when you call it with C-u. The only
+				situation wherein you are likely to truly use
+				the complex mode is when you want to do
+				multi-column alignment on the same line.
+
+
+* SPELL CHECKING
+Spell checking in Emacs is, surprisingly, not performed by Emacs
+itself. For Linux, the choices are aspell and ispell and Emacs will
+choose aspell over ispell as it is faster and more modern. Regardless
+of which spell checker you use, both are referred to as ispell in
+Emacs.
+       	    M-$			      Spell checks word at the point
+	    M-x flyspell-mode	      Minor mode that highlights spelling errors
+	    	C-M-i (and C-. )      Auto corrects the word at point. It picks
+		      	       	      the first likely match and corrects the
+				      word at the point; subsequent calls cycle
+				      through the words.
+	    M-x flyspell-prog-mode    As above, but only highlights strings
+	    			      and doc strings in code
+	    M-x ispell-buffer	      Runs spell check on buffer
+	    M-x ispell-region	      Runs spell check on region
+
+
+* QUOTED INSERT
+If you ever find yourself in need of inserting a literal TAB , RET or
+ASCII control code character, then you need quoted insert, bound to
+C-q
+If you want to insert a literal newline symbol, type C-q C-j as that
+is the newline – LINE FEED – symbol and not your return key (which is
+a CARRIAGE RETURN .)
+Quoted insert does a literal insert of any character you feed it — for
+example, C-q ESC inserts the ASCII control code ˆ[ , also known as
+ESCAPE .
+
+
+* HIGHLIGHTERS
+	M-s h p			Highlights a phrase
+	M-s h r			Highlights a regular expression
+	M-s h .			Highlights symbol at the point
+	M-s h u			Removes highlighting under the point
+
+
+* TRAMP
+Works by monitoring C-x C-f (and other commands) and it detects when
+you try to access remote files using a special syntax not unlike
+what command line tools such as scp use.
+
+All TRAMP connections follow this syntax:
+    /protocol:[user@]hostname[#port]:		Username, and port are optional.
+To actually invoke TRAMP you must call it from the root – typing // in
+IDO mode will jump to the root – and follow the format as above.
+
+Note that Emacs will not initiate a remote connection until
+you enter the second : , like so:
+    /ssh:homer@powerplant:/var/log/reactor.log
+
+You can do so much more. Invoking commands like "M-x rgrep" works
+seamlessly with Emacs and TRAMP. The command is run on the remote
+machine and the results are fed back to Emacs as though you’d called
+the command locally.  There is no end to the things you can call
+remotely. Here are some of the commands that I use remotely:
+	  C-x d	   	Dired
+	  M-x compile	Compile
+	  M-x rgrep	Grep Commands
+	  M-x shell	Emacs's Shell Wrapper
+	  M-x eshell	EShell, Emacs's elisp shell
+
+- User Switching:
+If you have to log in as one user but then have to call out to sudo to
+edit a file as root on a remote or local server:
+       	  /sudo:root@localhost:/etc/fstab	Sudo local access to /etc/fstab
+	  					You can usually omit root@
+Opening files with C-x C-f in a sudo buffer will open other files as sudo.
+
+- Multi-Hopping:
+Connect to a server throught other server, edit with sudo, etc.
+	  /ssh:homer@powerplant|sudo:powerplant:/root/salary.txt
+It is very important that you repeat the hostname in the sudo string or
+it will not work
+
+
+* DIRED BUFFER
+- Navigation:
+	RET		Visits the file or directory
+	ˆ		Goes up one directory
+	q		Quits dired
+	n,p,C-n,C-p	Moves the point up/down a listing
+
+- Marking and Unmarking:
+  If you want to carry out operations on multiple files or directories.
+     	m     	        Marks active
+	u		Unmarks active
+	U		Unmarks everything
+	d		Flags for deletion
+	* m		Marks region
+	* u		Unmarks region
+	* %		Marks files by regexp
+	* .		Marks files by extension
+	t,* t		Toggles marking (invert the marks)
+	* c 		Changes mark
+
+- Operations:
+	g		Refreshes dired buffer
+	+		Creates a sub-directory
+	C		Copy marked
+	R		Renames/moves marked
+	O		chown marked
+	G		chgrp marked
+	M		chmod marked
+	D		Deletes marked
+	x		Deletes flagged
+	F		Visits marked (requires dired-x), with C-U opens buffer
+			in the background.
+	M-s a C-s	ISearches all marked files
+	Q     		Query replace regexp marked files
+	!		Shell command on marked files
+	&		Async shell command on marked files
+
+- Working Across Directories:
+  How do you mark files in /foo/ but also /foo/bar/ ? The answer is
+the i command. Typing i on a directory in dired inserts it in the same
+dired buffer as a sub-directory. That means you can use the same mark
+and flag commands across dired directories provided they are in the
+same dired buffer. You can collapse a sub-directory – meaning
+commands won’t apply to it while it is collapsed – with $.
+	i      	        Insert this subdirectory into the same dired buffer.
+	$		Hide or unhide the current subdirectory and move to
+			next directory. Optional prefix arg is a repeat factor.
+			Use M-$ to (un)hide all directories.
+
+Typing i is tedious and won’t work well if you recursively want to
+apply a dired or shell command.  To get around that problem, you can
+use Emacs’s find wrapper commands.
+    	find-dired		Calls find with a pattern
+	find-name-dired		Calls find with -name
+	find-grep-dired		Calls find and grep
+	find-lisp-find-dired	Uses Emacs and regexp to find files
+
+
+* SHELL COMMANDS
+  	M-!			Calls shell command and prints output
+	C-u M-!			As above, but inserts into buffer
+	M-& 			Like M-! but asynchronous
+	C-u M-&			Like C-u M-! but asynchronous
+	M-| 			Pipes region to shell command
+	C-u M-|			Likes M-| but replaces region
+
+- Compiling in Emacs
+  Despite its name, excels at more than just compilation.
+  	M-x compile 	      	Runs a command, and tracks errors
+	M-x recompile		Re-runs last command
+	M-g M-n,M-g M-p		Jumps to next/previous error (global)
+	g   	    		Re-runs last command
+
+
+* SHELLS IN EMACS
+- Shell Mode:
+  Shell mode in Emacs calls out to an external program – such as bash
+on Linux or cmd.exe on Windows – and either redirects stdin , stdout
+and stderr on Windows, or through a pseudo-terminal (on Linux) so you
+can interact with the underlying shell through Emacs.
+    	M-x shell:
+	     M-p,M-n			Cycles through command history
+	     C-<up>,C-<down>		Cycles through command history
+	     M-r			ISearches history backward
+	     C-c C-p,C-c C-n		Jumps to previous/next prompt
+	     C-c C-s	    		Saves command output to file
+	     C-c C-o			Kills command output to kill ring
+	     C-c C-l			Lists command history
+	     C-d 			Deletes forward char or sends ˆD
+	     C-c C-z			Sends stop sub job
+	     TAB 			Completes at the point
+
+- Terminal Emulator:
+  Emacs has its own ANSI-capable terminal emulator. Invoking Terminal
+Emulator and selecting a shell, you can run interactive programs like
+top or even vim and emacs. Its main downside is its slowness and some
+obscure terminal emulation features are not supported.
+	M-x ansi-term:
+	     C-c C-j			Switches to line mode
+	     C-c C-k			Switches to character mode
+By default, ansi-term acts like a regular terminal emulator and not
+like shell mode or a typical Emacs buffer. However, you can switch
+between two different modes: line mode, which is like a typical Emacs
+buffer; and character mode, which is like a normal terminal emulator.
+
+The default mode is character mode and that means most keys –
+including keyboard characters, and not just Emacs key bindings – are
+sent directly to the underlying shell program, bypassing Emacs
+entirely. There is an escape character, C-c , that Emacs intercepts so
+commands like C-c C-j and C-c C-k are not sent to the sub-program. So
+if you want to send C-c to the sub-program, you must type C-c C-c.  If
+you want the most faithful terminal experience in Emacs, ANSI term is
+your best bet. I find the hassle of switching between line and character
+mode rather cumbersome so I prefer to use shell mode instead.
+
+- Emacs's Shell:
+	M-x eshell
+Shell that is written in elisp, that communicates,through Emacs, with
+the underlying host operating system and provides an excellent
+facsimile to a typical Linux-style bash shell, complete with
+elisp-emulated GNU coreutils commands like ls , cp , cd , and many
+more.
+
+In practice, that means you get a consistent shell across all
+platforms on which Emacs runs. Combined with native TRAMP support and
+the ability to redirect the output of commands straight into an Emacs
+buffer, you have a tool that is versatile, powerful and very much in
+the spirit of Emacs. Eshell is more akin to shell mode than ANSI
+term. It does not support interactive programs like top , preferring
+instead to open a dedicated M-x ansi-term instance to run those pro-
+grams when you call them from Eshell.
+
+It must be said that Eshell is an elisp shell first and foremost, as
+every command you type into Eshell is first filtered through Eshell’s
+own emulation layer, then through Emacs’s own interactive commands,
+and then finally through programs in your $PATH or in the current
+directory. For instance, you can type "dired ." to open a M-x dired
+session in the current directory, or "find-file todo.org" to open
+todo.org in your currently-running Emacs.
