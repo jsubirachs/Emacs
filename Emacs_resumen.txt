@@ -1022,3 +1022,286 @@ and then finally through programs in your $PATH or in the current
 directory. For instance, you can type "dired ." to open a M-x dired
 session in the current directory, or "find-file todo.org" to open
 todo.org in your currently-running Emacs.
+
+
+* EXWM
+An exwm-mode buffer has two input modes:
+- line-mode: EXWM intercepts all key events and sends applications
+             only keys not explicitly assigned. Buffers are created
+             in line-mode by default.
+- char-mode: EXWM does no intercept but only responds to those
+             globally grabbed key sequences.
+
+
+EXWM KEYBINDINGS:
+Use the s- (Super) modifier key.
+
+- Global key bindings: There is no global key bindings predefined
+                       in EXWM by default, but you can easily make
+                       one with exwm-input-set-key which works precisely
+                       like global-set-key. Available in both line-mode
+                       and char-mode.
+Recommended keys:
+s-r 	exwm-reset                      Switch to line-mode;
+                                        exit fullscreen mode;
+                                        refresh layout
+s-w 	exwm-workspace-switch 	        Interactively switch workspace
+s-N 	(exwm-workspace-switch N) 	    Switch to workspace N (N is a digit)
+
+- Local key bindings: Are only available in line-mode. The only way
+                      to make a local key binding is to modify
+                      exwm-mode-map with e.g. define-key. You may have
+                      to add the prefix key (first key) of the key
+                      sequence to exwm-input-prefix-keys if the
+                      prefix key is not already there, e.g.
+
+(push ?\C-q exwm-input-prefix-keys)
+(define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
+
+Prefix keys defined in exwm-input-prefix-keys are shared among all
+applications. You may modify the local binding of exwm-input-prefix-keys
+to change prefix keys for one specific applications. For instance:
+
+(add-hook 'exwm-manage-finish-hook
+          (lambda ()
+            (when (and exwm-class-name
+                       (string= exwm-class-name "Firefox"))
+              (setq-local exwm-input-prefix-keys '(?\C-c)))))
+
+When defining local keys prefixed with C-c, you're only allowed to
+use letters in the remaining of the sequence.
+
+Other keys are considered mode-specific and are reserved for either
+EXWM or other minor modes. Below is a list of mode-specific keys
+currently found in EXWM:
+
+C-c C-f 	    exwm-layout-set-fullscreen      Enter fullscreen mode
+C-c C-h 	    exwm-floating-hide 	            Hide a floating X window
+C-c C-k 	    exwm-input-release-keyboard	    Switch to char-mode
+C-c C-m 	    exwm-workspace-move-window      Move X window to another
+                                                workspace
+C-c C-q         exwm-input-send-next-key        Send a single key to the
+                                                X window; can be prefixed
+                                                with C-u to send multiple
+                                                keys
+C-c C-t C-f 	exwm-floating-toggle-floating 	Toggle between tiling and
+                                                floating mode
+C-c C-t C-m 	exwm-layout-toggle-mode-line 	Toggle mode-line
+
+- Simulation keys: Exploits a local key binding to map one key
+                   sequence to another and send it to the X window.
+                   There are no predefined simulation keys in EXWM.
+                   One may use exwm-input-set-simulation-keys to
+                   easily define them.
+
+(exwm-input-set-simulation-keys
+ '(([?\C-b] . left)
+   ([?\C-f] . right)
+   ([?\C-p] . up)
+   ([?\C-n] . down)
+   ([?\C-a] . home)
+   ([?\C-e] . end)
+   ([?\M-v] . prior)
+   ([?\C-v] . next)
+   ([?\C-d] . delete)
+   ([?\C-k] . (S-end delete))))
+
+This example enables Emacs-like line-editing keys for normal
+applications. Likewise, one should use e.g. C-c C-q C-v to send
+Ctrl v since it's mapped to next (PgDn).
+
+Simulation keys defined with exwm-input-set-simulation-keys are
+shared among all applications. To make this X window-specific,
+i.e. buffer-local, exwm-input-set-local-simulation-keys can be
+used instead. For example, the following lines will disable
+simulation keys for Firefox:
+                   
+(add-hook 'exwm-manage-finish-hook
+          (lambda ()
+            (when (and exwm-class-name
+                       (string= exwm-class-name "Firefox"))
+              (exwm-input-set-local-simulation-keys nil))))
+
+- Button-related key bindings: Are only used when moving/resizing
+                               an X window. Currently there are only
+                               two such use cases:
+
+s-<down-mouse-1> 	exwm-input-move-event       Move X window
+s-<down-mouse-3> 	exwm-input-resize-event 	Resize X window
+
+You may change the behaviors by setting the corresponding variables.
+Be sure to include a button-down event (e.g. <down-mouse-1>) in the
+key sequence to make it sense.
+
+
+EXWM LAYOUT MODES:
+There are three layout modes supported in EXWM.
+
+- Tiling: An X window is shown where its underlying buffer is
+          displayed. You can use C-x b, C-x 1, C-x 2, C-x 3 or
+          whatever you normally use to switch buffer / resize
+          Emacs window.
+
+- Floating: An extra Emacs frame is created to hold the X window.
+            By default, a floating X window can be moved (or resized)
+            by holding s-<down-mouse-1> (or s-<down-mouse-3>) when
+            dragging the mouse. You can alternatively move the
+            window with exwm-floating-move or resize it with
+            exwm-layout-{enlarge,shrink}-window[-horizontally]
+            which by default are not bound.
+            Note: X windows will automatically be made floating
+            whenever appropriate (e.g. the applications explicitly
+            request), unless exwm-manage-force-tiling is set to
+            non-nil.
+
+- Fullscreen: An X window in either tiling or floating mode can be
+              made fullscreen explicitly by invoking C-c C-f. If
+              the X window provides other approaches (typically
+              like pressing F11 or clicking a certain menu entry),
+              they should also work. One can leave fullscreen mode
+              with the versatile exwm-reset.
+
+
+EXWM WORKSPACE:
+EXWM supports workspaces and they can be created or removed on-the-fly.
+EXWM by default creates 1 initial workspace. You may change the number
+to e.g. 4 with:
+
+(setq exwm-workspace-number 4)
+
+exwm-workspace-switch, when called with no argument, allows you to
+switch workspace interactively. You will be provided with a prompt
+like:
+
+Switch to [+/-]: 0 [1] 2  3
+
+There're several ways to add and/or remove workspaces:
+
+-   Some workspace related commands, such as exwm-workspace-switch,
+    when called interactively provide prompts including the tag [+/-].
+    You may then press + to create an empty workspace at the end, or -
+    to remove the selected workspace.
+
+-   The command exwm-workspace-switch-create, similar
+    to exwm-workspace-switch, automatically creates missing workspaces
+    when given an out-of-range index.
+    
+-   The commands exwm-workspace-add/exwm-workspace-delete allow you
+    to add/delete a workspace at a certain position. When called
+    interactively, exwm-workspace-add adds a workspace at the end
+    (and switch to it), whereas exwm-workspace-delete deletes the
+    current workspace.
+    
+-   Emacs frame keys (prefixed with C-x 5) also provide a way to
+    manage workspaces. However, since there're other kinds of Emacs
+    frames in EXWM such as those used in floating X windows, be
+    careful not be mess up them.
+
+A workspace can be moved to another position with exwm-workspace-move,
+and the positions of two workspaces can be interchanged with
+exwm-workspace-swap.
+
+- X window handling among workspaces: An X window can be moved to another
+                                      workspace with C-c C-m, or
+                                      exwm-workspace-move-window. An X
+                                      window on another workspace can be
+                                      bring to the current one with
+                                      exwm-workspace-switch-to-buffer.
+                                Note: EXWM only shows X windows belonging
+                                      to the current workspace by default.
+                                      You may alter this behavior by
+                                      assigning
+                                      exwm-workspace-show-all-buffers a
+                                      non-nil value. Also, you might want
+                                      to set exwm-layout-show-all-buffers
+                                      to t to allow automatically moving
+                                      X windows from inactive workspaces
+                                      by switching to their associated
+                                      buffers.
+                               Note2: You are not supposed to move floating
+                                      X windows when
+                                      exwm-layout-show-all-buffers is
+                                      non-nil.
+
+- Autohide minibuffer & echo area: They can be detached and automatically
+                                   shown/hidden/resized by setting
+                                   exwm-workspace-minibuffer-position to
+                                   either 'bottom or 'top, which indicates
+                                   the position of the minibuffer & echo
+                                   area when they appear. The minibuffer
+                                   is shown when it's entered and hidden
+                                   when exited. The echo area is shown
+                                   there're new messages and hidden after
+                                   a certain amount of time, which is
+                                   controled by
+                                   exwm-workspace-display-echo-area-timeout
+                                   (in seconds).
+                                   The autohide minibuffer & echo area can
+                                   be attached back with
+                                   exwm-workspace-attach-minibuffer, and
+                                   then detached again with
+                                   exwm-workspace-detach-minibuffer.
+                             Note: exwm-workspace-attach-minibuffer
+                                   requires no dock/panel at the same place
+                                   to work. For example, if
+                                   exwm-workspace-minibuffer-position is
+                                   set to 'bottom, then there shouldn't be
+                                   any dock/panel at the bottom of the
+                                   screen if you want to attach the
+                                   autohide minibuffer & echo area.
+
+
+EXWM RandR (MULTI-SCREEN):
+The RandR support is optional and disabled by default. To enable it,
+add the following code to your .emacs:
+
+(require 'exwm-randr)
+(setq exwm-randr-workspace-output-plist '(0 "VGA1"))
+(add-hook 'exwm-randr-screen-change-hook
+          (lambda ()
+            (start-process-shell-command
+             "xrandr" nil "xrandr --output VGA1 --left-of LVDS1 --auto")))
+(exwm-randr-enable)
+
+The second line actually configures the multiple screens support. The
+variable exwm-randr-workspace-output-plist is a property list of the form
+(workspace-number-1 output-name-1 workspace-number-2 output-name-2 ...).
+You can find a list of output names together with their info by invoking
+xrandr utility with no argument.
+
+The third line puts output VGA1 on the left of LVDS1 and automatically
+resizes the screen every time a monitor is attached/detached.
+
+
+EXWM COMPOSITING MANAGER:
+A compositing manager is responsible for providing visual effects such as
+transparency. In EXWM a compositing manager module is provided. This
+module is optional and is disabled by default. To use it, add the
+following lines to your .emacs.
+
+(require 'exwm-cm)
+;; Make all Emacs frames opaque.
+(setq window-system-default-frame-alist '((x . ((alpha . 100)))))
+;; Assign everything else a 80% opacity.
+(setq exwm-cm-opacity 80)
+(exwm-cm-enable)
+
+You can comment out the last line and start/stop the compositing manager
+with exwm-cm-start / exwm-cm-stop (or exwm-cm-toggle) instead. The opacity
+of an X window can be modified with exwm-cm-set-opacity, otherwise it'll
+fall back to use the value of exwm-cm-opacity. The opacity of Emacs frames
+(workspace frames, floating frames, etc) can be modified with the alpha
+frame parameter; this can be done either by setting
+window-system-default-frame-alist just like the example above, or by
+calling set-frame-parameter at any time. If the alpha frame parameter is
+not set, the opacity of frames will also use the value of exwm-cm-opacity.
+
+
+EXWM SYSTEM TRAY:
+EXWM provides a simple system tray. It's disabled by default and can be
+enabled with the following lines:
+
+(require 'exwm-systemtray)
+(exwm-systemtray-enable)
+
+Note: The system tray is displayed on active workspace only.

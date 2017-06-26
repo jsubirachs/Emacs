@@ -18,7 +18,10 @@
     elpy
     flycheck
     material-theme
-    py-autopep8))
+    py-autopep8
+    exwm
+    projectile
+    wttrin))
 ;; install every package of variable 'myPackages'
 (mapc #'(lambda (package)
     (unless (package-installed-p package)
@@ -33,6 +36,22 @@
 ;; ######################################
 ;; MAGIT CONFIGURATION
 (global-set-key (kbd "C-x g") 'magit-status)
+;; --------------------------------------
+;; ######################################
+;; WTTRIN CONFIGURATION (weather application)
+(setq wttrin-default-cities '("Barcelona" "Mataro"))
+(setq wttrin-default-accept-language '("Accept-Language" . "es-ES"))
+;; --------------------------------------
+;; ######################################
+;; PROJECTILE CONFIGURATION
+; (add-to-list 'load-path "/path/to/projectile/directory")
+(require 'projectile)
+ ;; to enable in all buffers
+(projectile-global-mode)
+;; Indexing a large project can take a while.
+;; You can enable caching to prevent additional reindexing
+(setq projectile-enable-caching t)
+;; --------------------------------------
 ;; ######################################
 ;; PYTHON CONFIGURATION
 (elpy-enable)
@@ -44,23 +63,62 @@
 ;; enable autopep8 formatting on save
 (require 'py-autopep8)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+;; --------------------------------------
 ;; ######################################
 ;; OTHER STUFF
 ;; enable better-defaults
 (require 'better-defaults)
 ;; move between windows with S-(arrow keys)
 (windmove-default-keybindings)
+;; windows separator
+(window-divider-mode t)
 ;; .emacs ends here
 ;; --------------------------------------
 ;; --------------------------------------
 ;; --------------------------------------
 ;; CUSTOM OPTIONS
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(elpy-rpc-python-command "python2")
  '(package-selected-packages
    (quote
-    (better-defaults py-autopep8 material-theme flycheck elpy jedi magit)))
+    (wttrin projectile exwm better-defaults py-autopep8 material-theme flycheck elpy jedi magit)))
  '(python-shell-interpreter "python2")
  '(tab-width 4))
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
+;; ######################################
+;; EXWM CONFIGURATION
+;; No se si funciona el fringe
+(fringe-mode 1)
+;; Emacs server is not required to run EXWM but it has some interesting uses
+(server-start)
+(require 'exwm)
+(require 'exwm-config)
+(exwm-config-default)
+;; + 'slock' is a simple X display locker provided by suckless tools.
+(exwm-input-set-key (kbd "s-<f2>")
+                    (lambda () (interactive) (start-process "" nil "slock")))
+;; Emacs to show you the time (format-time-string describe formats)
+(setq display-time-format "%d-%m-%Y %H:%M")
+(display-time-mode 1)
+;; Execute Emacs "shell"
+(exwm-input-set-key (kbd "s-<return>") 'shell)
+;; RandR configuration
+(require 'exwm-randr)
+(setq exwm-randr-workspace-output-plist '(3 "VGA1"))
+(add-hook 'exwm-randr-screen-change-hook
+          (lambda ()
+            (start-process-shell-command
+             "xrandr" nil "xrandr --output VGA1 --left-of HDMI1 --auto")))
+(exwm-randr-enable)
+;; System tray (tengo que estudiar como funciona, a secas no aparece nada)
+;(require 'exwm-systemtray)
+;(exwm-systemtray-enable)
