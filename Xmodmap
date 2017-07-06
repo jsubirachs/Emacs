@@ -1,12 +1,11 @@
 !
-! Swap Caps_Lock and Control_L
-!
-remove Lock = Caps_Lock
-remove Control = Control_R
-keysym Control_R = Caps_Lock
-keysym Caps_Lock = Control_R
-add Lock = Control_R
-add Control = Caps_Lock
+! Swap 0 and masculine
+! xev -event keyboard (to see keycodes)
+! keycode 19 = 0
+! keycode 49 = masculine
+! Edit /usr/share/X11/xkb/keycodes/evdev and change:
+! <TLDE> = 49; to <TLDE> = 19;
+! <AE10> = 19; to <AE10> = 49;
 
 !
 ! Swap mouse buttons

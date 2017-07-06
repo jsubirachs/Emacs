@@ -16,6 +16,8 @@ export VISUAL=emacsclient
 export EDITOR="$VISUAL"
 
 # Changing pinky problem
+setxkbmap -option "ctrl:swapcaps" &
+# Changing other keymaps and mouse
 xmodmap ~/.Xmodmap &
                   
 # Start Emacs
