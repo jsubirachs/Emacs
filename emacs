@@ -17,10 +17,11 @@
     ;; ein ;; add the ein package (Emacs ipython notebook)
     elpy
     flycheck
-    material-theme
     py-autopep8
+    material-theme
     exwm
     projectile
+    slime
     wttrin))
 ;; install every package of variable 'myPackages'
 (mapc #'(lambda (package)
@@ -55,7 +56,7 @@
 ;; ######################################
 ;; PYTHON CONFIGURATION
 (elpy-enable)
-(elpy-use-ipython)
+;;(elpy-use-ipython)
 ;; use flycheck not flymake with elpy
 (when (require 'flycheck nil t)
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
@@ -82,11 +83,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(elpy-rpc-python-command "python2")
+ '(elpy-rpc-python-command "python")
  '(package-selected-packages
    (quote
-    (wttrin projectile exwm better-defaults py-autopep8 material-theme flycheck elpy jedi magit)))
- '(python-shell-interpreter "python2")
+    (ghub slime wttrin projectile exwm better-defaults py-autopep8 material-theme flycheck elpy jedi magit)))
+ '(python-shell-interpreter "ipython")
+ '(python-shell-interpreter-args "--simple-prompt -i")
  '(tab-width 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -122,3 +124,11 @@
 ;; System tray (tengo que estudiar como funciona, a secas no aparece nada)
 ;(require 'exwm-systemtray)
 ;(exwm-systemtray-enable)
+;; some popups disappear if force tiling is nil
+(setq exwm-manage-force-tiling t)
+;; --------------------------------------
+;; ######################################
+;; ACTIVATE SLIM AND STEEL BANK COMMON LISP compilator
+;; Set your lisp system and, optionally, some contribs
+(setq inferior-lisp-program "/usr/bin/sbcl")
+(setq slime-contribs '(slime-fancy))
