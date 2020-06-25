@@ -1,12 +1,10 @@
 !
 ! Swap 0 and masculine
+! See in /usr/local/share/X11/xkb/symbols/es and check every combination with keys
 ! xev -event keyboard (to see keycodes)
-! keycode 19 = 0
-! keycode 49 = masculine
-! Edit /usr/share/X11/xkb/keycodes/evdev and change:
-! <TLDE> = 49; to <TLDE> = 19;
-! <AE10> = 19; to <AE10> = 49;
-
+! xmodmap -pke (to see keymap)
+keycode 49 = 0 equal 0 equal
+keycode 19 = masculine ordfeminine masculine ordfeminine backslash degree backslash
 !
 ! Swap mouse buttons
 !

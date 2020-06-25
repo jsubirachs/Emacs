@@ -1,5 +1,7 @@
 ;; .emacs --- Emacs configuration
+
 ;; INSTALL PACKAGES
+;; --------------------------------------
 (require 'package)
 (setq package-archives
        '(("gnu" . "https://elpa.gnu.org/packages/")
@@ -9,8 +11,8 @@
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents))
-;; pip install flake8 jedi autopep8
-;; pip install ipython
+;; pip install flake8 jedi autopep8 --user
+;; pip install ipython --user
 (defvar myPackages
   '(better-defaults
     magit
@@ -28,33 +30,59 @@
     (unless (package-installed-p package)
       (package-install package)))
       myPackages)
+;; --------------------------------------
+
 ;; BASIC CUSTOMIZATION
+;; --------------------------------------
 (setq inhibit-startup-message t) ;; hide the startup message
 (load-theme 'material t) ;; load material theme
-(global-linum-mode t) ;; enable line numbers globally
 (setq make-backup-files nil) ;; don't create backup files
 (setq blink-cursor-mode nil) ;; cursor without blink
-;; ######################################
+;; This is similar to what 'linum-mode' provides, but much faster
+(require 'display-line-numbers)
+(defcustom display-line-numbers-exempt-modes
+  '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode
+   wl-summary-mode compilation-mode org-mode text-mode image-mode
+   doc-view-mode)
+  "Major modes on which to disable the linum mode, exempts them from global requirement"
+  :group 'display-line-numbers
+  :type 'list
+  :version "green")
+(defun display-line-numbers--turn-on ()
+  "turn on line numbers but excempting certain majore modes defined in `display-line-numbers-exempt-modes'"
+  (if (and
+       (not (member major-mode display-line-numbers-exempt-modes))
+       (not (minibufferp))
+       (not (string-match "*" (buffer-name)))
+       (not (> (buffer-size) 3000000)))  ;; disable linum on buffer greater than 3MB
+      (display-line-numbers-mode)))
+(global-display-line-numbers-mode)
+;; --------------------------------------
+
 ;; MAGIT CONFIGURATION
+;; --------------------------------------
 (global-set-key (kbd "C-x g") 'magit-status)
 ;; --------------------------------------
-;; ######################################
+
 ;; WTTRIN CONFIGURATION (weather application)
+;; --------------------------------------
 (setq wttrin-default-cities '("Barcelona" "Mataro"))
 (setq wttrin-default-accept-language '("Accept-Language" . "es-ES"))
 ;; --------------------------------------
-;; ######################################
+
 ;; PROJECTILE CONFIGURATION
+;; --------------------------------------
 ; (add-to-list 'load-path "/path/to/projectile/directory")
 (require 'projectile)
- ;; to enable in all buffers
-(projectile-global-mode)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(projectile-mode +1)
 ;; Indexing a large project can take a while.
 ;; You can enable caching to prevent additional reindexing
 (setq projectile-enable-caching t)
 ;; --------------------------------------
-;; ######################################
+
 ;; PYTHON CONFIGURATION
+;; --------------------------------------
 (elpy-enable)
 ;;(elpy-use-ipython)
 ;; use flycheck not flymake with elpy
@@ -65,8 +93,9 @@
 (require 'py-autopep8)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 ;; --------------------------------------
-;; ######################################
+
 ;; OTHER STUFF
+;; --------------------------------------
 ;; enable better-defaults
 (require 'better-defaults)
 ;; move between windows with S-(arrow keys)
@@ -75,9 +104,13 @@
 (window-divider-mode t)
 ;; .emacs ends here
 ;; --------------------------------------
+
+
 ;; --------------------------------------
+;; ######################################
 ;; --------------------------------------
 ;; CUSTOM OPTIONS
+;; --------------------------------------
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -86,7 +119,7 @@
  '(elpy-rpc-python-command "python")
  '(package-selected-packages
    (quote
-    (ghub slime wttrin projectile exwm better-defaults py-autopep8 material-theme flycheck elpy jedi magit)))
+    (wttrin slime py-autopep8 projectile material-theme magit flycheck exwm elpy better-defaults)))
  '(python-shell-interpreter "ipython")
  '(python-shell-interpreter-args "--simple-prompt -i")
  '(tab-width 4))
@@ -96,21 +129,34 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+
+;; --------------------------------------
 ;; ######################################
+;; --------------------------------------
 ;; EXWM CONFIGURATION
-;; No se si funciona el fringe
-(fringe-mode 1)
+;; --------------------------------------
 ;; Emacs server is not required to run EXWM but it has some interesting uses
+;; If you start server you can use emacsclient from terminal, git or wherever
 (server-start)
 (require 'exwm)
 (require 'exwm-config)
-(exwm-config-default)
-;; + 'slock' is a simple X display locker provided by suckless tools.
+(exwm-config-example)
+;; Execute xmodmap tool for change keymaps
+(defun run-xmodmap()
+  (call-process "xmodmap" nil 0 nil
+                (expand-file-name "~/.Xmodmap")))
+(run-xmodmap)
+;; Margen en la izquierda de 5 pixels
+(fringe-mode 5)
+;; 'slock' is a simple X display locker provided by suckless tools.
+;; "xset dpms force off" save energy screen
 (exwm-input-set-key (kbd "s-<f2>")
-                    (lambda () (interactive) (start-process "" nil "slock")))
+    (lambda () (interactive)
+        (start-process-shell-command "" nil "xset dpms force off; slock")))
 ;; Emacs to show you the time (format-time-string describe formats)
 (setq display-time-format "%d-%m-%Y %H:%M")
-(display-time-mode 1)
+(display-time-mode t)
 ;; Execute Emacs "shell"
 (exwm-input-set-key (kbd "s-<return>") 'shell)
 ;; RandR configuration
@@ -127,8 +173,15 @@
 ;; some popups disappear if force tiling is nil
 (setq exwm-manage-force-tiling t)
 ;; --------------------------------------
+
+
+;; --------------------------------------
 ;; ######################################
+;; --------------------------------------
 ;; ACTIVATE SLIM AND STEEL BANK COMMON LISP compilator
+;; --------------------------------------
 ;; Set your lisp system and, optionally, some contribs
 (setq inferior-lisp-program "/usr/bin/sbcl")
 (setq slime-contribs '(slime-fancy))
+;; --------------------------------------
+(put 'upcase-region 'disabled nil)
