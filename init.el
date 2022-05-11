@@ -33,7 +33,7 @@
 
 ;; To see statistics run M-x use-package-report
 (setq use-package-compute-statistics t)
-;; To always use :ensure t and don't need specify
+;; To always use :ensure t and don't need to specify
 (setq use-package-always-ensure t)
 
 (use-package system-packages
@@ -539,8 +539,11 @@
   :config
   (setq css-indent-offset 2))
 
-;; (use-package web-mode
-;;   :defer t)
+;; 1. Start the server with 'httpd-start'
+;; 2. Use 'impatient-mode' on any buffer
+;; 3. Visit 'http://localhost:8080/imp/' with any browser
+(use-package impatient-mode
+  :defer t)
 
 (use-package php-mode
   :defer t
@@ -583,6 +586,7 @@
 
 ;; Pinentry
 (require 'epg)
+(setq epg-debug t)
 (setq epg-pinentry-mode 'loopback)
 ;; (setq epg-gpg-program "usr/bin/gpg2")
 ;; (require 'epa-file)
