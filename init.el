@@ -585,24 +585,13 @@
 (setq dired-listing-switches "-lAh --group-directories-first") 
 
 ;; Pinentry
-(require 'epg)
-(setq epg-debug t)
-(setq epg-pinentry-mode 'loopback)
-;; (setq epg-gpg-program "usr/bin/gpg2")
-;; (require 'epa-file)
-;; (epa-file-enable)
-;; (setq epa-file-select-keys nil)
-;; (setq epa-pinentry-mode 'loopback)
-;; (pinentry-start)
+;; Se supone que epg es el nuevo pero no rula, rula con epa
+;; (require 'epg)
+;; (setq epg-pinentry-mode 'loopback)
 
-;; (use-package pinentry
-;;   :custom
-;;   (epa-pinentry-mode 'loopback)
-;;   :config
-;;   (pinentry-start))
+(use-package pinentry
+  :custom
+  (epa-pinentry-mode 'loopback)
+  :config
+  (pinentry-start))
 
-
-;; For fix ssh using gpg-agent
-;; (defun run-updatestartuptty()
-;;   (call-process "gpg-connect-agent" nil 0 nil "updatestartuptty /bye"))
-;; (run-updatestartuptty)

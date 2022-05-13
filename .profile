@@ -15,9 +15,6 @@ if [ -z "$(pgrep -u over shepherd)" ]; then
   shepherd >/dev/null 2>&1
 fi
 
-# For fix ssh using gpg-agent
-gpg-connect-agent updatestartuptty /bye 1>/dev/null
-
 # We're running Emacs server
 export VISUAL=emacsclient
 export EDITOR="$VISUAL"
