@@ -12,7 +12,8 @@
 (customize-set-variable 'package-archives
                         `(,@package-archives
                           ("melpa" . "https://melpa.org/packages/")
-                          ("org" . "https://orgmode.org/elpa/")
+                          ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+                          ;; ("org" . "https://orgmode.org/elpa/")
                           ("elpa" . "https://elpa.gnu.org/packages/")))
                           ;; ("melpa-stable" . "https://stable.melpa.org/packages/")
                           ;; ("marmalade" . "https://marmalade-repo.org/packages/")
@@ -117,7 +118,7 @@
   (exwm-input-set-key (kbd "s-s")
     (lambda () (interactive)
       ;; Mirar de poner un timestamp en el fichero creado para no sobreescribir
-      (start-process-shell-command "" nil "maim -s ~/Downloads/Screenshot.jpg"))))
+      (start-process-shell-command "" nil (concat "maim -s ~/Downloads/" (format-time-string "%d%m%Y_%H%M%S") "_Screenshot.jpg")))))
 
 (use-package exwm-randr
   :ensure nil
@@ -167,8 +168,8 @@
   ("s-p" . projectile-command-map)
   :init
   ;; NOTE: Set this to the folder where you keep your Git repos!
-  (when (file-directory-p "~/Projects/Code")
-    (setq projectile-project-search-path '("~/Projects/Code"))))
+  (when (file-directory-p "~/Projects")
+    (setq projectile-project-search-path '("~/Projects"))))
   
 (use-package flx-ido
   :config
@@ -289,6 +290,9 @@
 ;; Org Mode Configuration ------------------------------------------------------
 
 (use-package org
+  :pin gnu
+  ;; needed for org-contacts
+  :ensure org-contrib
   :hook (org-mode . (lambda ()
                       (org-indent-mode)
                       (variable-pitch-mode 1)
@@ -325,9 +329,9 @@
         org-log-done 'time
         org-log-into-drawer t
         org-agenda-files
-	    '("~/Projects/Code/OrgFiles/Tasks.org"
-	      "~/Projects/Code/OrgFiles/Habits.org"
-	      "~/Projects/Code/OrgFiles/Birthdays.org"))
+	    '("~/Agenda/Tasks.org"
+	      "~/Agenda/Habits.org"
+          "~/Agenda/Contacts.org"))
   ;; Org habit
   (require 'org-habit)
   (add-to-list 'org-modules 'org-habit)
@@ -402,25 +406,35 @@
   ;; Org capture templates
   (setq org-capture-templates
         `(("t" "Tasks / Projects")
-          ("tt" "Task" entry (file+olp "~/Projects/Code/OrgFiles/Tasks.org" "Inbox")
+          ("tt" "Task" entry (file+olp "~/Agenda/Tasks.org" "Inbox")
            "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
           ("j" "Journal Entries")
           ("jj" "Journal" entry
-           (file+olp+datetree "~/Projects/Code/OrgFiles/Journal.org")
+           (file+olp+datetree "~/Agenda/Journal.org")
            "* %<%H:%M> - Journal :journal:\n\n%?\n\n"
            :clock-in :clock-resume
            :empty-lines 1)
           ("jm" "Meeting" entry
-           (file+olp+datetree "~/Projects/Code/OrgFiles/Journal.org")
+           (file+olp+datetree "~/Agenda/Journal.org")
            "* %<%H:%M> - %a :meetings:\n\n%?\n\n"
            :clock-in :clock-resume
            :empty-lines 1)
           ("w" "Workflows")
-          ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/OrgFiles/Journal.org")
+          ("we" "Checking Email" entry (file+olp+datetree "~/Agenda/Journal.org")
            "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
           ("m" "Metrics Capture")
-          ("mw" "Weight" table-line (file+headline "~/Projects/Code/OrgFiles/Metrics.org" "Weight")
-           "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+          ("mw" "Weight" table-line (file+headline "~/Agenda/Metrics.org" "Weight")
+           "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
+          ("c" "Contacts" entry
+           (file+headline "~/Agenda/Contacts.org" "Contacts")
+           ,(concat "*  %(org-contacts-template-name)\n"
+                    ":PROPERTIES:\n"
+                    ":EMAIL: %(org-contacts-template-email)\n"
+                    ":PHONE: %^{PHONE}\n"
+                    ":NOTE: %^{NOTE}\n"
+                    ":BIRTHDAY: %^{yyyy-mm-dd}\n"
+                    ":END:")
+           :empty-lines 1)))
   ;; Org-babel supported languages for execute
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -443,6 +457,11 @@
   ;; For org-capture general menu
   :bind (("C-c c" . org-capture)
          ("C-c a" . org-agenda)))
+
+(use-package org-contacts
+  :after org-agenda
+  :custom
+  (org-contacts-files '("~/Agenda/Contacts.org")))
 
 ;; Org-Roam para tener nustro Zettlekasten
 (use-package org-roam
@@ -509,6 +528,11 @@
   :commands (lsp lsp-deferred)
   :init
   (setq lsp-keymap-prefix "C-c l")
+  ;; Necesario ?¿
+  :hook (lsp-mode . yas-global-mode)
+  ;; A falta de company para snippets y para emmet
+  :bind (("C-ñ" . yas-expand)
+         ("C-<tab>" . emmet-expand-line))
   :config
   (lsp-enable-which-key-integration t))
 
@@ -520,7 +544,8 @@
   (setq typescript-indent-level 2))
 
 (use-package js
-  :hook (js-mode . lsp-deferred)
+  :hook ((js-mode . lsp-deferred)
+         (js-mode . emmet-mode))
   :config
   (setq js-indent-level 2))
 
@@ -581,6 +606,9 @@
 (use-package yasnippet-snippets
   :defer t)
 
+(use-package js-react-redux-yasnippets
+  :defer t)
+
 ;; para ordenar dired con directorios primero
 (setq dired-listing-switches "-lAh --group-directories-first") 
 
@@ -595,3 +623,9 @@
   :config
   (pinentry-start))
 
+
+;; Timer for fun
+(use-package tea-time
+  :custom
+  (tea-time-sound "~/Downloads/llop.mp3")
+  (tea-time-sound-command "mpv %s"))
