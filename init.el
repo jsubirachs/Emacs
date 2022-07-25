@@ -629,3 +629,25 @@
   :custom
   (tea-time-sound "~/Downloads/llop.mp3")
   (tea-time-sound-command "mpv %s"))
+
+
+;; Function for sync some folders
+
+(defun folder-action-save-hook ()
+  "A file save hook that will look for a script in the same
+    directory, called .on-save.  It will then execute that script
+    asynchronously."
+  (when (and (stringp buffer-file-name)
+             (or (string-match "/ZK/" buffer-file-name)
+                 (string-match "/Agenda/" buffer-file-name)))
+    (let* ((filename (buffer-file-name))
+           (dir      (locate-dominating-file filename ".on-save"))
+           (script   (concat dir ".on-save")))
+      ;; (write-file filename nil)
+      (when (file-exists-p script)
+        (message "Starting Sync %s..." dir)
+        (start-process "" nil script)
+        (message "Sync %s Finished." dir)
+        ))))
+
+(add-hook 'after-save-hook 'folder-action-save-hook)
