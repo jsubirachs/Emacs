@@ -77,17 +77,24 @@
 
 ;; Install packages
 
+;; el-patch  para parchear  funciones en  caliente  y te  avisa si  se
+;; actualiza  la funcion  para que  veas  si te  interesa mantener  el
+;; parche o no
+(use-package el-patch)
+(eval-when-compile
+  (require 'el-patch))
+
 (use-package better-defaults)
 
-(use-package elpy
-  :after python
-  :custom
-  (elpy-rpc-python-command "python3")
-  :config
-  (elpy-enable)
-  (remove-hook 'elpy-modules  'elpy-module-flymake)
-  (add-hook 'elpy-mode-hook 'flycheck-mode)
-  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+;; (use-package elpy
+;;   :after python
+;;   :custom
+;;   (elpy-rpc-python-command "python3")
+;;   :config
+;;   (elpy-enable)
+;;   (remove-hook 'elpy-modules  'elpy-module-flymake)
+;;   (add-hook 'elpy-mode-hook 'flycheck-mode)
+;;   (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 
 (use-package exwm
   ;; Lo instalamos a nivel de OS
@@ -97,6 +104,7 @@
   (exwm-manage-force-tiling t)
   :config
   (exwm-input-set-key (kbd "s-<return>") 'eshell)
+  (exwm-input-set-key (kbd "C-s-<return>") 'shell)
   (exwm-input-set-key (kbd "s-<f2>")
     (lambda () (interactive)
       (start-process-shell-command "" nil "xset dpms force off; slock")))
@@ -144,13 +152,13 @@
   :config
   (exwm-config-example))
 
-(use-package flycheck
-  :after elpy)
+;; (use-package flycheck
+;;   :after elpy)
 
-(use-package flycheck-pyflakes
-  :after flycheck)
-  ;; :config
-  ;; (add-hook 'python-mode-hook 'flycheck-mode))
+;; (use-package flycheck-pyflakes
+;;   :after flycheck)
+;;   ;; :config
+;;   ;; (add-hook 'python-mode-hook 'flycheck-mode))
 
 (use-package magit
   :bind ("C-x g" . magit-status))
@@ -182,24 +190,24 @@
   (setq ido-use-faces nil))
 
 
-(use-package py-autopep8
-  :after elpy)
+;; (use-package py-autopep8
+;;   :after elpy)
 
-(use-package slime
-  :defer t
-  :custom
-  (inferior-lisp-program "/usr/local/bin/sbcl")
-  (slime-contribs '(slime-fancy)))
+;; (use-package slime
+;;   :defer t
+;;   :custom
+;;   (inferior-lisp-program "/usr/local/bin/sbcl")
+;;   (slime-contribs '(slime-fancy)))
 
 ;; Try packages without installing
 (use-package try
   :defer t)
 
-(use-package wttrin
-  :defer t
-  :custom
-  (wttrin-default-cities '("Barcelona" "Mataro"))
-  (wttrin-default-accept-language '("Accept-Language" . "es-ES")))
+;; (use-package wttrin
+;;   :defer t
+;;   :custom
+;;   (wttrin-default-cities '("Barcelona" "Mataro"))
+;;   (wttrin-default-accept-language '("Accept-Language" . "es-ES")))
 
 
 ;; Built-in packages
@@ -228,11 +236,11 @@
   (custom-file null-device "Don't store customizations")
   (tab-width 4))
 
-(use-package python
-  :defer t
-  :custom
-  (python-shell-interpreter "ipython")
-  (python-shell-interpreter-args "--simple-prompt -i"))
+;; (use-package python
+;;   :defer t
+;;   :custom
+;;   (python-shell-interpreter "ipython")
+;;   (python-shell-interpreter-args "--simple-prompt -i"))
 
 ;; This is similar to what 'linum-mode' provides, but much faster
 (use-package display-line-numbers
@@ -260,7 +268,6 @@
 ;; display correctly:
 ;;
 ;; M-x all-the-icons-install-fonts
-
 (use-package all-the-icons)
 
 (use-package doom-modeline
@@ -523,91 +530,91 @@
                 (expand-file-name "~/.Xmodmap")))
 (run-xmodmap)
 
-;; Test y si rula, ponerlo en mejor lugar del fichero
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  ;; Necesario ?¿
-  :hook (lsp-mode . yas-global-mode)
-  ;; A falta de company para snippets y para emmet
-  :bind (("C-ñ" . yas-expand)
-         ("C-<tab>" . emmet-expand-line))
-  :config
-  (lsp-enable-which-key-integration t))
+;; ;; Test y si rula, ponerlo en mejor lugar del fichero
+;; (use-package lsp-mode
+;;   :commands (lsp lsp-deferred)
+;;   :init
+;;   (setq lsp-keymap-prefix "C-c l")
+;;   ;; Necesario ?¿
+;;   :hook (lsp-mode . yas-global-mode)
+;;   ;; A falta de company para snippets y para emmet
+;;   :bind (("C-ñ" . yas-expand)
+;;          ("C-<tab>" . emmet-expand-line))
+;;   :config
+;;   (lsp-enable-which-key-integration t))
 
 ;; Hay que instalar el server: M-x lsp-install-server RET ts-ls RET
-(use-package typescript-mode
-  :mode "\\.ts\\'"
-  :hook (typescript-mode . lsp-deferred)
-  :config
-  (setq typescript-indent-level 2))
+;; (use-package typescript-mode
+;;   :mode "\\.ts\\'"
+;;   :hook (typescript-mode . lsp-deferred)
+;;   :config
+;;   (setq typescript-indent-level 2))
 
-(use-package js
-  :hook ((js-mode . lsp-deferred)
-         (js-mode . emmet-mode))
-  :config
-  (setq js-indent-level 2))
+;; (use-package js
+;;   :hook ((js-mode . lsp-deferred)
+;;          (js-mode . emmet-mode))
+;;   :config
+;;   (setq js-indent-level 2))
 
-;; Hay que instalar el server: M-x lsp-install-server RET emmet-ls RET
-(use-package emmet-mode
-  :hook ((emmet-mode . lsp-deferred)
-         ;; Auto-start on any markup modes
-         ;; ((sgml-mode html-mode css-mode) . emmet-mode))
-         ((sgml-mode html-mode css-mode) . lsp-deferred))
-  :config
-  (setq emmet-indentation 2))
+;; ;; Hay que instalar el server: M-x lsp-install-server RET emmet-ls RET
+;; (use-package emmet-mode
+;;   :hook ((emmet-mode . lsp-deferred)
+;;          ;; Auto-start on any markup modes
+;;          ;; ((sgml-mode html-mode css-mode) . emmet-mode))
+;;          ((sgml-mode html-mode css-mode) . lsp-deferred))
+;;   :config
+;;   (setq emmet-indentation 2))
 
-;; Hay que instalar el server: M-x lsp-install-server RET css-ls RET
-(use-package css-mode
-  :hook (css-mode . lsp-deferred)
-  :config
-  (setq css-indent-offset 2))
+;; ;; Hay que instalar el server: M-x lsp-install-server RET css-ls RET
+;; (use-package css-mode
+;;   :hook (css-mode . lsp-deferred)
+;;   :config
+;;   (setq css-indent-offset 2))
 
-;; 1. Start the server with 'httpd-start'
-;; 2. Use 'impatient-mode' on any buffer
-;; 3. Visit 'http://localhost:8080/imp/' with any browser
-(use-package impatient-mode
-  :defer t)
+;; ;; 1. Start the server with 'httpd-start'
+;; ;; 2. Use 'impatient-mode' on any buffer
+;; ;; 3. Visit 'http://localhost:8080/imp/' with any browser
+;; (use-package impatient-mode
+;;   :defer t)
 
-(use-package php-mode
-  :defer t
-  :config
-  (add-hook 'php-mode-hook
-            '(lambda ()
-               ;; Enable company-mode
-               (company-mode t)
-               (set (make-local-variable 'company-backends)
-                    '((company-ac-php-backend company-dabbrev-code)
-                      company-capf company-files))
-               ;; Enable flycheck-mode // instalar interprete php en el sistema
-               (flycheck-mode t)
-               ;; Enable yasnippet mode
-               ;; (yas-reload-all)
-               (yas-minor-mode t)
-               ;; Enable ElDoc support (optional)
-               (ac-php-core-eldoc-setup)
-               ;; Jump to definition (optional)
-               (define-key php-mode-map (kbd "M-.")
-                 'ac-php-find-symbol-at-point)
-               ;; Return back (optional)
-               (define-key php-mode-map (kbd "M-,")
-                 'ac-php-location-stack-back))))
+;; (use-package php-mode
+;;   :defer t
+;;   :config
+;;   (add-hook 'php-mode-hook
+;;             '(lambda ()
+;;                ;; Enable company-mode
+;;                (company-mode t)
+;;                (set (make-local-variable 'company-backends)
+;;                     '((company-ac-php-backend company-dabbrev-code)
+;;                       company-capf company-files))
+;;                ;; Enable flycheck-mode // instalar interprete php en el sistema
+;;                (flycheck-mode t)
+;;                ;; Enable yasnippet mode
+;;                ;; (yas-reload-all)
+;;                (yas-minor-mode t)
+;;                ;; Enable ElDoc support (optional)
+;;                (ac-php-core-eldoc-setup)
+;;                ;; Jump to definition (optional)
+;;                (define-key php-mode-map (kbd "M-.")
+;;                  'ac-php-find-symbol-at-point)
+;;                ;; Return back (optional)
+;;                (define-key php-mode-map (kbd "M-,")
+;;                  'ac-php-location-stack-back))))
 
-;; (electric-pair)
-;; (subword-mode 1)
+;; ;; (electric-pair)
+;; ;; (subword-mode 1)
 
-(use-package ac-php
-  :defer t)
+;; (use-package ac-php
+;;   :defer t)
 
-(use-package company-php
-  :defer t)
+;; (use-package company-php
+;;   :defer t)
 
-(use-package yasnippet-snippets
-  :defer t)
+;; (use-package yasnippet-snippets
+;;   :defer t)
 
-(use-package js-react-redux-yasnippets
-  :defer t)
+;; (use-package js-react-redux-yasnippets
+;;   :defer t)
 
 ;; para ordenar dired con directorios primero
 (setq dired-listing-switches "-lAh --group-directories-first") 
@@ -623,31 +630,115 @@
   :config
   (pinentry-start))
 
+;; Config built-in auth-source package
+(use-package auth-source
+  :init
+  ;; Activa auth-source para que busque en password-store
+  (auth-source-pass-enable))
+
+;; Pass (major mode for password-store and password-store-otp)
+(use-package pass
+  :defer t
+  :bind ("C-x w" . pass)
+  :custom
+  (pass-username-fallback-on-filename t)
+  :config/el-patch
+  ;; Add my function for sync my password-store backup
+  (defun backup-my-pass-before-quit ()
+    (let ((on-save-program (concat (getenv "HOME") "/ZK/pass/.on-save"))
+          (secret (auth-source-pick-first-password :host "backup.local" :user "passphrase")))
+      (if (not secret)
+          (message "Error getting password for backup sync!!")
+        (when (not (zerop (call-process on-save-program nil nil nil secret)))
+          (error (format "Error executing %s" on-save-program))))
+      ))
+
+  ;; Patch pass-quit
+  (el-patch-defun pass-quit ()
+    "Kill the buffer quitting the window."
+    (interactive)
+    (when (y-or-n-p "Kill all pass entry buffers? ")
+      (dolist (buf (buffer-list))
+        (with-current-buffer buf
+          (when (eq major-mode 'pass-view-mode)
+            (kill-buffer buf)))))
+    ;; Parche para que si algo va mal con el backup no salir del programa
+    (el-patch-swap (quit-window t)
+                   (unless (backup-my-pass-before-quit)
+                       (quit-window t))))
+  )
+
+(use-package password-store-otp
+  :defer t
+  :custom
+  (password-store-otp-screenshots-path "/tmp")
+  :config/el-patch
+  ;; Parche de la funcion que ejecuta zbarimg
+  (el-patch-defun password-store-otp-append-from-image (entry)
+    "Check clipboard for an image and scan it to get an OTP URI, append it to ENTRY."
+    (interactive (list (password-store-otp-completing-read)))
+    (let ((qr-image-filename (password-store-otp--get-qr-image-filename entry))
+          (screenshot-executable
+           (el-patch-swap (password-store-otp--get-screenshot-executable) "maim")
+           ))
+      (when (not (zerop (call-process screenshot-executable nil nil nil qr-image-filename)))
+        (error "Couldn't get image from clipboard"))
+      (with-temp-buffer
+        (condition-case nil
+            (call-process "zbarimg" nil t nil "-q" "--raw"
+                          (el-patch-add "--nodbus")
+                          qr-image-filename)
+          (error
+           (error "It seems you don't have `zbar-tools' installed")))
+        (password-store-otp-append
+         entry
+         (buffer-substring (point-min) (point-max))))
+      (when (not password-store-otp-screenshots-path)
+        (delete-file qr-image-filename)))))
 
 ;; Timer for fun
 (use-package tea-time
   :custom
   (tea-time-sound "~/Downloads/llop.mp3")
-  (tea-time-sound-command "mpv %s"))
+  (tea-time-sound-command "mpv %s")
+  :config/el-patch
+  (el-patch-defun tea-time (timeval)
+    "Ask how long the tea should draw and start a timer.
+Cancel prevoius timer, started by this function"
+    (interactive "sHow long (min)? ")
+    (if (not (string-match "\\`\\([0-9]+\\)\\'" timeval))
+        (tea-show-remaining-time)
+      (let* ((minutes ((el-patch-swap string-to-int string-to-number) (substring timeval (match-beginning 1)
+					                                                             (match-end 1))))
+	         (seconds (* minutes 60)))
+        (progn
+	      (tea-timer-cancel)
+	      (setq tea-active-timer (tea-timer seconds))
+	      )))
+    )
+  )
 
+
+;; (message (format "Pass: %s" (auth-source-pick-first-password :host "backup.local" :user "passphrase")))
 
 ;; Function for sync some folders
-
 (defun folder-action-save-hook ()
   "A file save hook that will look for a script in the same
     directory, called .on-save.  It will then execute that script
-    asynchronously."
+    synchronously."
   (when (and (stringp buffer-file-name)
              (or (string-match "/ZK/" buffer-file-name)
                  (string-match "/Agenda/" buffer-file-name)))
     (let* ((filename (buffer-file-name))
            (dir      (locate-dominating-file filename ".on-save"))
            (script   (concat dir ".on-save")))
-      ;; (write-file filename nil)
       (when (file-exists-p script)
         (message "Starting Sync %s..." dir)
-        (start-process "" nil script)
-        (message "Sync %s Finished." dir)
+        ;; asynchronously can't check if runs ok
+        ;; (start-process "" nil script)
+        (if (zerop (call-process script))
+            (message "Sync %s Finished." dir)
+          (message "ERROR Syncing %s" dir))
         ))))
 
 (add-hook 'after-save-hook 'folder-action-save-hook)
