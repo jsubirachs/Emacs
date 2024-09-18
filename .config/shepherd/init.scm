@@ -19,17 +19,17 @@
 ;;     #:start (make-forkexec-constructor '("syncthing" "-no-browser"))
 ;;     #:stop  (make-kill-destructor)))
 
-;; (define pulseaudio
-;;   (make <service>
-;;     #:provides '(pulseaudio)
-;;     #:respawn? #t
-;;     #:start (make-forkexec-constructor '("pulseaudio"))
-;;     #:stop  (make-kill-destructor)))
+(define pulseaudio
+  (make <service>
+    #:provides '(pulseaudio)
+    #:respawn? #t
+    #:start (make-forkexec-constructor '("pulseaudio"))
+    #:stop  (make-kill-destructor)))
 
 ;; (register-services gpg-agent mcron syncthing pulseaudio)
-(register-services gpg-agent)
+(register-services gpg-agent pulseaudio)
 (action 'shepherd 'daemonize)
 
 ;; Start user services
 ;; (for-each start '(gpg-agent mcron syncthing pulseaudio))
-(for-each start '(gpg-agent))
+(for-each start '(gpg-agent pulseaudio))

@@ -30,3 +30,4 @@ xset r rate 200 60
 #xterm
 # exec ssh-agent dbus-launch --exit-with-session emacs -mm --debug-init --use-exwm
 exec dbus-launch --exit-with-session emacs -mm --debug-init --use-exwm
+
